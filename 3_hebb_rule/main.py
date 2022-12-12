@@ -7,7 +7,7 @@ for line in archive:
 
 w = []
 
-for i in range(len(entrys[0]) - 1):
+for i in range(len(entry[0]) - 1):
     w.append(0)
 
 outp = []
@@ -23,4 +23,4 @@ for i in range(len(entry)):
         y = outp[i]
         w[j] = w[j] + (int(x[j]) * int(y))
 
-    print('\nAs entradas são: ', x, 'As saidas são: ', saidas[i], 'Os pesos são', pesos)
+    print('\nAs entradas são: ', x, 'As saidas são: ', outp[i], 'Os pesos são', w)
