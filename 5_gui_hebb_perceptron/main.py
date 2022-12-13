@@ -125,7 +125,7 @@ if __name__ == "__main__":
     QtCore.QCoreApplication.setAttribute(QtCore.Qt.AA_ShareOpenGLContexts)
     app = QApplication([])
 
-    window = uic.loadUi('C:/Users/jesse/Desktop/Facul/ia-cc-2022-2-jessegabriel/5_gui_hebb_perceptron/gui.ui')
+    window = uic.loadUi('interface.ui')
 
     x1 = window.findChild(QComboBox, 'input1_x')
     x2 = window.findChild(QComboBox, 'input2_x')
