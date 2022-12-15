@@ -1,9 +1,9 @@
 import sys
 from PyQt5 import QtCore, uic
-from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QComboBox, \
-    QPushButton, QLabel, QMessageBox
-
+   QPushButton, QStatusBar, QMessageBox, QAction
+from PyQt5.QtGui import QIcon
+from neural_net import NeuralNet
 
 NUM_OF_NEURONS = 10
 
@@ -11,7 +11,7 @@ NUM_OF_NEURONS = 10
 class Gui:
     def __init__(self):
         # loading widgets elements from ui file
-        self.window = uic.loadUi(r"6_Character_Recognition\character_recognition.py")
+        self.window = uic.loadUi("character_recognition.ui")
 
         # Getting widget references
         self.black = QIcon("black.png")
@@ -24,6 +24,7 @@ class Gui:
         self.character_cb.currentIndexChanged.connect(self.on_character_combobox_current_index_changed)
         self.train_pb.clicked.connect(self.on_train_pushbutton_clicked)
         self.run_pb.clicked.connect(self.on_run_pushbutton_clicked)
+        self.status_bar = self.window.findChild(QStatusBar, "statusbar")
 
         # Input list starts with -1 values
         # which means a white screen
@@ -40,6 +41,10 @@ class Gui:
         self.training_set = []
         self.font_a = []
         self.populate_training_set()
+
+        # Neural net with 10 neurons
+        self.neural_net = NeuralNet(NUM_OF_NEURONS, self.training_set)
+        self.trained = False
 
     def on_character_combobox_current_index_changed(self):
         if int(self.character_cb.currentText()) == -1:
@@ -853,10 +858,24 @@ class Gui:
             self.inputs[79] = -1
     
     def on_run_pushbutton_clicked(self):
-        print("Run clicked")
+        if self.trained:
+            rec_numbers = self.neural_net.run(self.inputs)
+            output = "Recognized numbers: "
+
+            for n in rec_numbers:
+                output += str(n) + " "
+
+            self.status_bar.showMessage(output)
+        else:
+            msg = QMessageBox()
+            msg.setText("You must train, before running!")
+            msg.exec_()
 
     def on_train_pushbutton_clicked(self):
-        print("Train clicked")
+        self.neural_net.train_net()
+        self.status_bar.showMessage(
+            "The neural network was successfully trained. Ready to run!")
+        self.trained = True
 
     def populate_pixels_list(self):
         # Hard coding: display 10x8
@@ -867,7 +886,7 @@ class Gui:
                 self.pixels[-1].clicked.connect(getattr(self, "on_pixel_" + str(i) + str(j) + "_clicked"))
 
     def populate_training_set(self):
-        f = open(r"6.Character_Recognition\font_a.txt").readlines()
+        f = open('font_a.txt').readlines()
         aux = []
         for line in f:
             if line.startswith("#"):
