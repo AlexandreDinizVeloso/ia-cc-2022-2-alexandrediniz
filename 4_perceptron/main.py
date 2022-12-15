@@ -28,7 +28,7 @@ while(training):
       
         for i in range(len(train)):
             summ = 0
-            summ += int(pesos[2])
+            summ += int(w[2])
             
             for j in range(len(train[i])-1):
                 summ += int(train[i][j]) * int(w[j])
