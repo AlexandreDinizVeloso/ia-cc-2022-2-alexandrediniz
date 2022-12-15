@@ -867,7 +867,7 @@ class Gui:
                 self.pixels[-1].clicked.connect(getattr(self, "on_pixel_" + str(i) + str(j) + "_clicked"))
 
     def populate_training_set(self):
-        f = open(r"6.Character_Recognition\numbers.txt").readlines()
+        f = open(r"6.Character_Recognition\font_a.txt").readlines()
         aux = []
         for line in f:
             if line.startswith("#"):
